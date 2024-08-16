@@ -1,0 +1,39 @@
+services:
+  metabase-postgres:
+    image: metabase/metabase:v0.50.20.1
+    ports:
+      - "3000:3000"
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: postgres #Default auto created db
+      MB_DB_PORT: 5432
+      MB_DB_USER: postgres
+      MB_DB_PASS: mypwd
+      MB_DB_HOST: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+  postgres:
+    image: postgres:15
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres # Default user
+      POSTGRES_PASSWORD: mypwd
+      POSTGRES_DB: postgres # Default db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+volumes:
+  pg_data:
+#    driver: local
+#    driver_opts:
+#      type: none
+#      o: bind
+#      device: ./postgres-data
+
