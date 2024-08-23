@@ -58,7 +58,7 @@ cd /app
 java -jar metabase.jar load-from-h2 /tmp/metabase_prod.h2.db
 ```
 
-Once loaded you can start metabase: `docker-compose up -d metabase-postgres` and test it.
+Once loaded you can start metabase: `docker-compose up -d metabase-postgres` and test it by accessing `localhost:3002`
 
 **Using a remote postgres instead local**
 
@@ -67,11 +67,11 @@ If you wish to migrate to a remote postgres instead. Do the same steps above but
 
 ## Troubleshooting migration
 
-**If dump-to-h2 or load-from-h2 are too slow or you have out of memory errors**
+### If dump-to-h2 or load-from-h2 are too slow or you have out of memory errors
 If command above is slow or if you have out of memory issues, give more memory by adding `-Xmx<NUMBER_OF_GB>g` argument
 
 
-**During step 1: If you have issues during metabase-mysql start**
+### During step 1: If you have issues during metabase-mysql start
 
 During this step metabase might fail to start due to migrations. The table responsable for migrations is called **databasechangelog**.Sometimes you will have errors that this table or others already exists, you might have to rename tables from lower case to upper case.
 
@@ -88,7 +88,7 @@ RENAME TABLE metabase.databasechangeloglock TO metabase.DATABASECHANGELOGLOCK;
 Run: `docker-compose up -d metabase-mysql` & Test: `localhost:3001`
 
 
-**During step 3: Errors with metabase_field table**
+### During step 3: Errors with metabase_field table
 
 Caused by: org.postgresql.util.PSQLException: ERROR: duplicate key value violates unique constraint "idx_uniq_field_table_id_parent_id_name_2col"
   Detail: Key (table_id, name)=(480, EventCode) already exists.
