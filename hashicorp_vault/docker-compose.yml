@@ -1,0 +1,17 @@
+services:
+  vault:
+    image: hashicorp/vault:1.14.1
+    container_name: vault
+    restart: unless-stopped
+    environment:
+      SKIP_CHOWN: true #Don't make vault do chown to volume
+    ports:
+      - "8200:8200"
+    # Local:Container
+    volumes:
+        - ./vault-config:/vault/config
+        - ./vault-data:/vault/data
+    cap_add:
+      - IPC_LOCK
+    # Config needs to be in the volume and passed as param
+    command: "vault server -config=/vault/config/vault.hcl"

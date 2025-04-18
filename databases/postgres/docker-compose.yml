@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres
+    user: postgres #Avoids error: role "root" does not exist
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres # Default user
+      POSTGRES_PASSWORD: superuser
+      POSTGRES_DB: postgres # Default db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+volumes:
+  pg_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./postgres-data
+
